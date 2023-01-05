@@ -1,0 +1,131 @@
+
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family:  Courier;
+}
+:root {
+    --crimson:#dc1e3f;
+    --bg-primary:#000817;
+    --bg-secondary:#dc1e3f;
+    --col-primary:#dc1e3f;
+    --col-secondary:#ffffff;
+    --col-tertiary:#000817;
+    --bg-secondary-trsp:#dc1e3f33;
+    --col-secondary-trsp:#ffffff33;
+    
+    /*
+    --bg-primary:#fffadd;
+    --bg-secondary:#000817;
+    --col-primary:#000817;
+    --col-secondary:#dc1e3f;
+    --col-tertiary:#fffadd;
+    --bg-secondary-trsp:#dc1e3f33;
+    --col-secondary-trsp:#ffffff33;
+    */
+    
+    /*
+    --songrim:#1edc3f;
+    --bg-primary:#000817;
+    --bg-secondary:#1edc3f;
+    --col-primary:#1edc3f;
+    --col-secondary:#ffffff;
+    --col-tertiary:#000817;
+    --bg-secondary-trsp:#1edc3f33;
+    --col-secondary-trsp:#ffffff33;
+    */
+    
+    /*
+    --blueneon:#1e3fdc;
+    --bg-primary:#000817;
+    --bg-secondary:#1e3fdc;
+    --col-primary:#1e3fdc;
+    --col-secondary:#ffffff;
+    --col-tertiary:#00081;
+    --bg-secondary-trsp:#1e3fdc33;
+    --col-secondary-trsp:#ffffff33;
+    */
+    
+    
+    
+    
+    -font-primary:#ffffff;
+    --dark: #00000a;
+    --colorpaint: #bb060b;
+    --white: #f8ffff;
+}
+
+
+
+
+
+@font-face{
+ src: url("../fonts/Karla-Regular.ttf");   
+ font-family: karla;
+}
+@font-face{
+ src: url("../fonts/SourceSansPro-Regular.ttf");   
+ font-family: sourcesans;
+}
+@font-face{
+ src: url("../fonts/leaguespartan-bold.ttf"); 
+ font-family: leaguespartanbold;
+}
+@font-face{
+ src: url("../fonts/HelveticaBold.ttf"); 
+ font-family: heleveticabold;
+}
+@font-face{
+    src: url("../fonts/square-deal.ttf");
+    font-family: square-deal;
+}
+@font-face{
+    src: url("../fonts/abelr.ttf");
+    font-family: abelr;
+}
+@font-face{
+    src: url("../fonts/nb.ttf");
+    font-family: nb;
+}
+@font-face{
+    src: url("../fonts/Autumn.ttf");
+    font-family: iF;
+}
+@font-face{
+    src: url("../fonts/Woodwork.ttf");
+    font-family: iFi;
+}
+@font-face{
+    src: url("../fonts/superstar.ttf");
+    font-family: iFj;
+}
+@font-face{
+    src: url("../fonts/autumnin.ttf");
+    font-family: iFk;
+}
+
+
+
+
+
+
+
+[fnt-hF]{
+    font-family: leaguespartanbold;
+}
+[fnt-pF]{
+    font-family: karla;
+}
+[fnt-p3F]{
+    font-family: nb;
+}
+[fnt-p4F]{
+    font-family: abelr;
+}
+[fnt-p2F]{
+    font-family: sourcesans;
+}
+[fnt-hF-6]{
+    font-family: square-deal;
+}

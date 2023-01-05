@@ -1,0 +1,17 @@
+{
+  "name": "app",
+  "scripts": {
+    "dev": "php -S 0.0.0.0:7004"
+  },
+  "dependencies": {
+    "gsap": "^3.11.3",
+    "terser-webpack-plugin": "^5.3.6",
+    "three": "^0.146.0"
+  },
+  "devDependencies": {
+    "gsap": "^3.11.3",
+    "three": "^0.146.0",
+    "webpack":  "^5.75.0",
+    "webpack-cli": "^5.0.0"
+  }
+}
