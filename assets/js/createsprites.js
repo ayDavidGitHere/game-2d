@@ -71,7 +71,7 @@ createsprites.do = function(canvas){
         let CH = a.height = wh;
         let CR = MATH$.resultantOf(CW, CH);
         Game.CW = CW, Game.CH = CH;
-        let scene = new CDraw.useScene(b);
+        let scene = new CDraw.useScene(b); console.log(b)
         let bgRect = new CDraw.rect(0,CW,0,CH,"_#ffffff55");
         //scene.add(bgRect);
         let text = new CDraw.text("+60px iFi", "COOL ASF", CW/2, CH/2, "_white");

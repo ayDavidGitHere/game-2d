@@ -212,7 +212,7 @@ class CDraw{
         this.sourceX = sx; this.sourceWidth = sw;
         this.sourceY = sy; this.sourceHeight = sh;
         this.center = {};
-        this.rotation = {rad: 0, about:this.center};
+        this.rotation = {rad: 0, about:this.center}; this.scale = {x: 1, y: 1};
         this.alpha = 1;
         this.GCParams = {shadow: [0, 0, "transparent", 0]};
         this.updateProps = (B)=>{
@@ -290,17 +290,17 @@ class CDraw{
     }
     //Transform
     static rotate= function(child, B){
-        if(child.rotation.rad!=0 && child.center!=undefined){
-            B.translate(child.rotation.about.x, child.rotation.about.y);
-            B.rotate(child.rotation.rad);
-            B.translate(-child.rotation.about.x, -child.rotation.about.y);
-        }
-    }
-    static scale= function(child, B){
-        //B.translate(child.rotation.about.x, child.rotation.about.y);
         if(!child.scale) child.scale = {x:1, y:1};
+        let rotrad = (child.rotation.rad!==0)
+        if(rotrad) 
+        B.translate(child.rotation.about.x , child.rotation.about.y);
+        B.translate(child.scale.x==-1?(B.canvas.width-(B.canvas.width/2-child.x)*2+child.lengthX)*1:0, 0)
+        B.rotate(child.rotation.rad);
         B.scale(child.scale.x||1, child.scale.y||1);
-        //B.translate(-child.rotation.about.x, -child.rotation.about.y);
+        //B.translate(child.scale.x==-1?(B.canvas.width/2-child.x)*2:0, 0)
+        if(rotrad)
+        B.translate(-child.rotation.about.x, -child.rotation.about.y);
+        //B.translate(child.scale.x==-1?(B.canvas.width+child.x-child.lengthX/2)*-1:0, 0)
     }
     static shadow = function(B, params){
         [B.shadowColor, B.shadowOffsetX, B.shadowOffsetY, B.shadowBlur] =
@@ -340,7 +340,6 @@ class CDraw{
                 child.indexInScene = childIn;
                 this.B.save();
                 CDraw.stylesAndComposites.draw(child, this.B);
-                CDraw.scale(child, this.B);
                 CDraw.rotate(child, this.B);
                 child.draw(this.B);
                 CDraw.stylesAndComposites.restore(this.B, child);
@@ -410,5 +409,5 @@ class CDraw{
  * ADD: sourceWidth, sourceHeight for --- img
  * ADD: postStyle
  * 
- * //CONSISTENt
+ * //CONSISTENT
  */

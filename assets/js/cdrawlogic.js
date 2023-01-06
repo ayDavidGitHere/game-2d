@@ -1,3 +1,5 @@
+import Hero from './Hero.js';
+import BadGuy from './Worm.js';
 let cdrawlogic = {};
 cdrawlogic.loadGame = function(canvas){
     
@@ -49,7 +51,7 @@ cdrawlogic.loadGame = function(canvas){
         a.style.display = "block";
         a.style.margin = "0 auto"
         a.style.transform = "translate(-50%,-50%)";
-        a.style.border = "1px solid yellow";
+        a.style.border = "1px solid yellow"; 
         return {canvas: a, context: b};
     }
     
@@ -85,6 +87,7 @@ cdrawlogic.loadGame = function(canvas){
         let backgrounds = {};
         backgrounds.frst0 = new CDraw.img(Game.assetsLoader.assets.forestp0.src, 0, CW, 0, CH );
         backgrounds.frst1 = new CDraw.img(Game.assetsLoader.assets.forestp1.src, 0, CW, 0, CH );
+        backgrounds.frst3 = new CDraw.img("./assets/sprites/Parallax Forest Background (Seamless)/Parallax Forest Background - Blue/07_Forest.png", 0, CW*1.5, 0, CH );
         backgrounds.frst2 = new CDraw.img(Game.assetsLoader.assets.forestp2.src, 0, CW*1.5, 0, CH );
         backgrounds.bushes = new CDraw.img("./assets/sprites/Parallax Forest Background (Seamless)/Parallax Forest Background - Blue/02_Bushes.png", 0, CW*1.5, 0, CH );
         Object.keys(backgrounds).map((key)=>{
@@ -117,127 +120,10 @@ cdrawlogic.loadGame = function(canvas){
               background.extension[direction] += speed;
           }
         });
+        Game.herospeed = 0;
+        new Hero(Game, scene, CW, CH, backgrounds);
+        new BadGuy(Game, scene, CW, CH, backgrounds);
         
-        
-        let herospritesdim = {dx:CW/5, dw: CW/2.8, dy: CH/2, dh: CH/2, }
-        let herosprites = {};
-        //idle
-        herosprites.idle = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Idle.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        herosprites.idle.splits = 6;
-        scene.add(herosprites.idle);
-        
-        //attack
-        herosprites.attack = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Attack1.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        herosprites.attack.splits = 4;
-        scene.add(herosprites.attack);
-        
-        //attack2
-        herosprites.attack2 = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Attack2.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        herosprites.attack2.splits = 4;
-        scene.add(herosprites.attack2);
-        
-        //jump
-        herosprites.jump = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Jump.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        herosprites.jump.splits = 2;
-        scene.add(herosprites.jump);
-        
-        
-        //run
-        herosprites.run = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Run.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        //herosprites.run.autostop = false;
-        herosprites.run.splits = 8;
-        scene.add(herosprites.run);
-        
-        
-        //throw
-        herosprites.throw = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Throw.png", herospritesdim.dx, herospritesdim.dw, herospritesdim.dy, herospritesdim.dh, {}, 0, null, 0, null);
-        //herosprites.run.autostop = false;
-        herosprites.throw.splits = 3;
-        scene.add(herosprites.throw);
-        
-        
-        
-        
-        
-        Object.keys(herosprites).map((key)=>{
-          let herosprite = herosprites[key];
-          herosprite.alpha = 0;
-          scene.add(herosprite);
-          if(herosprite.autostop==undefined) 
-          herosprite.autostop = true;
-          herosprite.animaterunning = false;
-          herosprite.animate = function(running=false, call=()=>{}){
-              if(!running && herosprite.animaterunning) return;
-              Object.keys(herosprites).map((key)=>{let herosprite = herosprites[key];herosprite.alpha = 0;});
-              
-              
-              if(!running)
-              herosprite.sprites_ind = 0;
-              herosprite.sprites_ind += 0.1;
-              let max = herosprite.splits||4;
-              let ind = Math.floor(herosprite.sprites_ind)%max;
-              if(ind==max-1 && herosprite.autostop) 
-                running = false;
-              else 
-                running = true;
-              herosprite.animaterunning = running;
-             
-             
-              call(max);
-              herosprite.alpha = 1;
-              herosprite.sourceX = (herosprite.image.width/max)*ind;
-              herosprite.sourceWidth = herosprite.image.width/max;
-              if(running) 
-              requestAnimationFrame(function(){
-                  herosprite.animate(running, call);
-              });
-              else{
-                herosprites.idle.animate();
-              }
-          }
-          herosprite.endanimate = function(running=false){
-            
-          }
-        });//        
-        herosprites.idle.animate();
-        
-        
-      
-      
-      
-      
-      
-        
-        
-      Game.hero = {
-        attack: function(){
-          herosprites.attack.animate();
-          console.log("attack")
-        },
-        attack2: function(){
-          herosprites.attack2.animate();
-          console.log("attack2")
-        },
-        throw: function(){
-          herosprites.throw.animate();
-          console.log("throw")
-        },
-        jump: function(){
-          herosprites.jump.animate(false, function(max){
-              herosprites.jump.y += 0.9*(herosprites.jump.sprites_ind<max/2?-1:1);
-          });
-          console.log("jump")
-        },
-        run: function(dir=1){
-          herosprites.run.animate(false, function(){
-            backgrounds.frst2.move("x", -dir*2*1.5);
-            backgrounds.frst1.move("x", -dir*1.12*1.5);
-            backgrounds.bushes.move("x", -dir*2.0*1.5);
-          });
-          console.log("run");
-        }, //EO run
-      };
-      
       /*
        Object.keys(backgrounds).map((key)=>{
           let background = backgrounds[key];
@@ -255,13 +141,22 @@ cdrawlogic.loadGame = function(canvas){
         
         
         
-        function animate(){anim(CW, CH, backgrounds, herosprites); requestAnimationFrame(animate);}
+        function animate(){anim(CW, CH, backgrounds); requestAnimationFrame(animate);}
         animate();
     }//EO draw
     
-    function anim(CW, CH, backgrounds, herosprites){
-      
-      
+    function anim(CW, CH, backgrounds){
+            backgrounds.frst1.move("x", Game.herospeed*0.8);
+            backgrounds.frst3.move("x", Game.herospeed*0.92);
+            backgrounds.frst2.move("x", Game.herospeed*0.95);
+            backgrounds.bushes.move("x", Game.herospeed*0.99);
+            Game.hero.active();
+            Game.worm.active();
+           
+            Game.herospeed = 0;
+            Game.hero.striking = 0;
+            Game.hero.takingHit = false;
+            Game.worm.takingHit = false;
     }//anim
     document.addEventListener("keydown", e=>{ 
       if(e.key=="z") Game.hero.attack2();
