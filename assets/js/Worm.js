@@ -29,6 +29,16 @@ function Worm(Game, scene, CW, CH, backgrounds){
         wormsprites.getHit = new CDraw.img("./assets/sprites/Fire Worm/Sprites/Worm/Get Hit.png", wormspritesdim.dx, wormspritesdim.dw, wormspritesdim.dy, wormspritesdim.dh, {}, 0, null, 0, null);
         wormsprites.getHit.splits = 3;
         scene.add(wormsprites.getHit);
+        
+        
+        
+        //dead
+        wormsprites.death = new CDraw.img("./assets/sprites/Fire Worm/Sprites/Worm/Death.png", wormspritesdim.dx, wormspritesdim.dw, wormspritesdim.dy, wormspritesdim.dh, {}, 0, null, 0, null);
+        wormsprites.death.splits = 8;
+        scene.add(wormsprites.death);
+        
+        
+        
         /*
         //attack2
         wormsprites.attack2 = new CDraw.img("./assets/sprites/Medieval Warrior Pack/Attack2.png", wormspritesdim.dx, wormspritesdim.dw, wormspritesdim.dy, wormspritesdim.dh, {}, 0, null, 0, null);
@@ -59,7 +69,7 @@ function Worm(Game, scene, CW, CH, backgrounds){
           if(wormsprite.autostop==undefined) 
           wormsprite.autostop = true;
           wormsprite.animaterunning = false;
-          wormsprite.animate = function(running=false, call=()=>{}){
+          wormsprite.animate = function(running=false, call=()=>{}, after=()=>{}){
               if(!running && wormsprite.animaterunning) return;
               Object.keys(wormsprites).map((key)=>{let wormsprite = wormsprites[key];wormsprite.alpha = 0;});
               
@@ -84,10 +94,11 @@ function Worm(Game, scene, CW, CH, backgrounds){
               wormsprite.sourceWidth = wormsprite.image.width/max;
               if(running) 
               requestAnimationFrame(function(){
-                  wormsprite.animate(running, call);
+                  wormsprite.animate(running, call, after);
               });
               else{
-                wormsprites.idle.animate();
+                let stop = after(max);
+                if(!stop) wormsprites.idle.animate();
               }
           }
           wormsprite.endanimate = function(running=false){
@@ -118,10 +129,14 @@ function Worm(Game, scene, CW, CH, backgrounds){
           console.log("attack2")
         },
         getHit: function(){
+          if(Game.worm.isdead) return;
           wormsprites.getHit.animate(false, function(){
               Game.worm.takingHit = true;
+              wormsprites.getHit.GCParams.shadow = [0, 0, "red", 5];
+          }, function(){
+              wormsprites.getHit.GCParams.shadow = [0, 0, "red", 0];
           });
-          Game.worm.health -= 20;
+          Game.worm.health -= 100/3;
           console.log(Game.worm.health)
         },
         jump: function(){
@@ -138,12 +153,29 @@ function Worm(Game, scene, CW, CH, backgrounds){
         
         
         
-        dead: function(){
-          Object.keys(wormsprites).map(key=>{
-              let sprite = wormsprites[key];
-              sprite.opacity = 0;
-              sprite.GCParams.shadow = [0, 0, "red", 10];
+        death: function(){
+          if(Game.worm.isdead) return;
+          wormsprites.death.animate(false, function(max){
+            
+          }, function(max){
+            setTimeout(function(){
+            let sx = CW*(1+Math.random());
+            Object.keys(wormsprites).map(key=>{
+                let sprite = wormsprites[key];
+                sprite.x += sx
+                Game.worm.health = 100;
+                Game.worm.isdead = false;
+            });
+            }, 0);
+            Game.worm.health = 0;
+            Game.worm.isdead = true;
+            Object.keys(wormsprites).map(key=>{
+                let sprite = wormsprites[key];
+            });
+            console.log("death");
+            return true;
           });
+          console.log("dying");
         },
         takeHit: function(){
           Game.worm.getHit();
@@ -181,8 +213,9 @@ function Worm(Game, scene, CW, CH, backgrounds){
             Game.worm.position = {x: sprite.x, y: sprite.y}
             Game.worm.size = {width: sprite.lengthX, height: sprite.breadthY}
             Game.worm.movement();
-            Game.worm.autoAttack();
-            if(Game.worm.health<=0) Game.worm.dead();
+            
+            if(Game.worm.health<=0) Game.worm.death();
+            if(!Game.worm.health<=0) Game.worm.autoAttack();
         }
       };
       

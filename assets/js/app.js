@@ -15,6 +15,7 @@ function App(){
     let loadElements = new LoadElements();
     //createsprites.do(loadElements.canvas);
     cdrawlogic.loadGame(loadElements.canvas);
+    //cdrawlogic.loadGenerativeArt1(loadElements.canvas);
 }
 App();//calling app here rather than html else wepack would t do full compile
 export default App;

@@ -63,7 +63,7 @@ function Hero(Game, scene, CW, CH, backgrounds){
           if(herosprite.autostop==undefined) 
           herosprite.autostop = true;
           herosprite.animaterunning = false;
-          herosprite.animate = function(running=false, call=()=>{}){
+          herosprite.animate = function(running=false, btw=()=>{}, after=()=>{}){
               if(!running && herosprite.animaterunning) return;
               Object.keys(herosprites).map((key)=>{let herosprite = herosprites[key];herosprite.alpha = 0;});
               
@@ -81,15 +81,16 @@ function Hero(Game, scene, CW, CH, backgrounds){
              
               
               Game.hero.currentSprite = herosprite;
-              call(max);
+              btw(max);
               herosprite.alpha = 1;
               herosprite.sourceX = (herosprite.image.width/max)*ind;
               herosprite.sourceWidth = herosprite.image.width/max;
               if(running) 
               requestAnimationFrame(function(){
-                  herosprite.animate(running, call);
+                  herosprite.animate(running, btw, after);
               });
               else{
+                after(max)
                 herosprites.idle.animate();
               }
           }
@@ -111,9 +112,10 @@ function Hero(Game, scene, CW, CH, backgrounds){
         ...Game.hero,
         attack: function(){
           herosprites.attack.animate(false, function(){
-            Game.hero.striking++;
+            Game.hero.striking = (Game.hero.striking==undefined?0:Game.hero.striking+1); 
+          }, function(){
+            Game.hero.striking = 0; 
           });
-          Game.hero.checkContact()
           console.log("attack")
         },
         attack2: function(){
@@ -148,20 +150,20 @@ function Hero(Game, scene, CW, CH, backgrounds){
           
         },
         checkBound: function(){
+            let against = Game.worm;
             Game.hero.bound = false;
-            if(!Game.worm.position) return;
+            if(!against.position) return;
             if(Game.hero.position.x+Game.hero.size.width
-            > Game.worm.position.x
+            > against.position.x + against.size.width/3
             && Game.hero.position.x <
-            Game.worm.position.x+
-            Game.worm.size.width)
+            against.position.x+
+            against.size.width - against.size.width/3)
             Game.hero.bound = Game.worm;
             else 
             Game.hero.bound = false;
         },
         checkHit: function(){
-            if(Game.hero.striking>=20 && Game.hero.bound){
-              //console.log("hit");
+            if(Game.hero.striking==18 && Game.hero.bound){
               Game.hero.bound.takeHit();
             }
         },

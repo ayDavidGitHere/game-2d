@@ -1,6 +1,7 @@
-import Hero from './Hero.js';
+import loadGenerativeArt1 from "./cdrawlogic.loadGenerativeArt.js";
+import Hero from './Skeleton.js';
 import BadGuy from './Worm.js';
-let cdrawlogic = {};
+let cdrawlogic = {loadGenerativeArt1};
 cdrawlogic.loadGame = function(canvas){
     
     
@@ -123,7 +124,9 @@ cdrawlogic.loadGame = function(canvas){
         Game.herospeed = 0;
         new Hero(Game, scene, CW, CH, backgrounds);
         new BadGuy(Game, scene, CW, CH, backgrounds);
-        
+         
+         
+         
       /*
        Object.keys(backgrounds).map((key)=>{
           let background = backgrounds[key];
@@ -154,7 +157,6 @@ cdrawlogic.loadGame = function(canvas){
             Game.worm.active();
            
             Game.herospeed = 0;
-            Game.hero.striking = 0;
             Game.hero.takingHit = false;
             Game.worm.takingHit = false;
     }//anim
